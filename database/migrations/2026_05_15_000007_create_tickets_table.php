@@ -1,0 +1,33 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('tickets', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('booking_item_id')->constrained('booking_items')->cascadeOnDelete();
+            $table->string('ticket_code')->unique();
+            $table->string('qr_code')->nullable();  // QR code image path or base64
+            $table->string('pdf_path')->nullable();  // Generated PDF path
+            $table->boolean('is_scanned')->default(false);
+            $table->dateTime('scanned_at')->nullable();
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('tickets');
+    }
+};
